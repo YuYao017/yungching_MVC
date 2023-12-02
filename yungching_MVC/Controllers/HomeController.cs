@@ -20,6 +20,7 @@ namespace yungching_MVC.Controllers
 
         public IActionResult Privacy()
         {
+            string test;
             return View();
         }
 

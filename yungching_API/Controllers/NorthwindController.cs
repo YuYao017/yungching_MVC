@@ -24,9 +24,16 @@ namespace yungching_API.Controllers
         }
         // GET: api/<NorthwindController>
         [HttpGet]
-        public IEnumerable<Shippers> Get()
+        public ActionResult<IEnumerable<Shipper>> Get()
         {
-            return _IShippersShippers.GetShippersList();
+            try
+            {
+                return _IShippersShippers.GetShippersList();
+            }
+            catch
+            {
+                return NotFound();
+            }
             //string sqlcmd = "select *  FROM [master].[dbo].[Shippers] with (nolock) ";
 
             //List<Shippers> shippersList = new List<Shippers>();
@@ -64,9 +71,25 @@ namespace yungching_API.Controllers
 
         // GET api/<NorthwindController>/5
         [HttpGet("{ShipperID}")]
-        public Shippers Get(int ShipperID)
+        public ActionResult<Shipper> Get(int ShipperID)
         {
-            return _IShippersShippers.GetShippers(ShipperID);
+            try
+            {
+                Shipper shippers = _IShippersShippers.GetShipper(ShipperID);
+                if (shippers != null && shippers.ShipperID != 0)
+                {
+                    return shippers;
+                }
+                else
+                {
+                    return NotFound();
+                }
+
+            }
+            catch
+            {
+                return NotFound();
+            }
             //string sqlcmd = "select *  FROM [master].[dbo].[Shippers] with (nolock) Where ShipperID = @ShipperID ";
 
             //Shippers shipper = new Shippers();
@@ -100,28 +123,68 @@ namespace yungching_API.Controllers
 
         // POST api/<NorthwindController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public string Post([FromBody] Shipper Shippers)
         {
-        }
 
+            try
+            {
+                int reslut = _IShippersShippers.InsShipper(Shippers);
+                if (reslut == 1)
+                {
+                    return $"新增成功";
+                }
+                else
+                {
+                    return $"新增失敗";
+                }
+            }
+            catch
+            {
+                return $"新增失敗";
+            }
+        }
         // PUT api/<NorthwindController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{ShipperID}")]
+        public string Put(int ShipperID, [FromBody] Shipper Shippers)
         {
+            try
+            {
+                int reslut = _IShippersShippers.updateShipper(ShipperID, Shippers);
+                if (reslut == 1)
+                {
+                    return $"{ShipperID}更新成功";
+                }
+                else
+                {
+                    return $"{ShipperID}更新失敗";
+                }
+            }
+            catch
+            {
+                return $"{ShipperID}更新失敗";
+            }
+
         }
 
         // DELETE api/<NorthwindController>/5
         [HttpDelete("{ShipperID}")]
         public string Delete(int ShipperID)
         {
-            int reslut =_IShippersShippers.DelShippers(ShipperID);
-            if (reslut == 1)
+            try
             {
-                return "成功";
+                int reslut = _IShippersShippers.DelShipper(ShipperID);
+                if (reslut == 1)
+                {
+                    return $"{ShipperID}刪除成功";
+                }
+                else
+                {
+                    return $"{ShipperID}刪除失敗";
+                }
             }
-            else
+            catch
             {
-                return "失敗";
+                return $"{ShipperID}更新失敗";
             }
         }
     }

@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+using yungching_API.Model;
 using yungching_API.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,8 +11,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddTransient<IShippersShippers, ShippersSevices>();
-
+//builder.Services.AddTransient<IShippersShippers, ShippersSevices>();
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//builder.Services.AddDbContext<masterContext>(options =>
+//        options.UseSqlServer(connectionString));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

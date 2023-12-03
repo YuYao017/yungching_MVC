@@ -4,101 +4,176 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 namespace yungching_API.Repository
 {
-    public class ShippersSevices : IShippersShippers
+    public class ShipperSevices : IShippersShippers
     {
         private readonly IConfiguration _Configuration;
         string defaultConnection = String.Empty;
-        public ShippersSevices(IConfiguration configuration)
+        public ShipperSevices(IConfiguration configuration)
         {
             _Configuration = configuration;
             //字串設定TrustServerCertificate=True
             defaultConnection = _Configuration["ConnectionStrings:DefaultConnection"];
         }
-        public IEnumerable<Shippers> GetShippersList()
+        public ActionResult<IEnumerable<Shipper>> GetShippersList()
         {
-            string sqlcmd = "select *  FROM [master].[dbo].[Shippers] with (nolock) ";
-
-            List<Shippers> shippersList = new List<Shippers>();
-
-            using (SqlConnection cn = new SqlConnection(defaultConnection))
+            try
             {
-                cn.Open();
-                using (SqlCommand cmd = new SqlCommand(sqlcmd, cn))
-                {
-                    //rerusl = cmd.ExecuteScalar();
-                    using (SqlDataAdapter salda = new SqlDataAdapter(cmd))
-                    {
-                        DataSet ds = new DataSet();
-                        salda.Fill(ds);
-                        DataTable dt = ds.Tables[0];
 
-                        if (dt.Rows.Count > 0 && dt != null)
+
+                string sqlcmd = "select *  FROM [master].[dbo].[Shipper] with (nolock) ";
+
+                List<Shipper> ShipperList = new List<Shipper>();
+
+                using (SqlConnection cn = new SqlConnection(defaultConnection))
+                {
+                    cn.Open();
+                    using (SqlCommand cmd = new SqlCommand(sqlcmd, cn))
+                    {
+                        //rerusl = cmd.ExecuteScalar();
+                        using (SqlDataAdapter salda = new SqlDataAdapter(cmd))
                         {
-                            foreach (DataRow dr in dt.Rows)
+                            DataSet ds = new DataSet();
+                            salda.Fill(ds);
+                            DataTable dt = ds.Tables[0];
+
+                            if (dt.Rows.Count > 0 && dt != null)
                             {
-                                Shippers shipper = new Shippers()
+                                foreach (DataRow dr in dt.Rows)
                                 {
-                                    ShipperID = int.Parse(dr["ShipperID"].ToString() ?? "0"),
-                                    CompanyName = dr["CompanyName"].ToString() ?? "無",
-                                    Phone = dr["Phone"].ToString()
-                                };
-                                shippersList.Add(shipper);//DataRow Mapping To Model
+                                    Shipper shipper = new Shipper()
+                                    {
+                                        ShipperID = int.Parse(dr["ShipperID"].ToString() ?? "0"),
+                                        CompanyName = dr["CompanyName"].ToString() ?? "無",
+                                        Phone = dr["Phone"].ToString()
+                                    };
+                                    ShipperList.Add(shipper);//DataRow Mapping To Model
+                                }
                             }
                         }
                     }
                 }
+                return ShipperList.ToList();
             }
-            return shippersList.ToList();
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public Shippers GetShippers(int ShipperID)
+        public Shipper GetShipper(int ShipperID)
         {
-            string sqlcmd = "select *  FROM [master].[dbo].[Shippers] with (nolock) Where ShipperID = @ShipperID ";
-
-            Shippers shipper = new Shippers();
-
-            using (SqlConnection cn = new SqlConnection(defaultConnection))
+            try
             {
-                cn.Open();
-                using (SqlCommand cmd = new SqlCommand(sqlcmd, cn))
+                string sqlcmd = "select *  FROM [master].[dbo].[Shipper] with (nolock) Where ShipperID = @ShipperID ";
+
+                Shipper shipper = new Shipper();
+
+                using (SqlConnection cn = new SqlConnection(defaultConnection))
                 {
-                    cmd.Parameters.Add("@ShipperID", System.Data.SqlDbType.Int).Value = ShipperID;
-                    using (SqlDataAdapter salda = new SqlDataAdapter(cmd))
+                    cn.Open();
+                    using (SqlCommand cmd = new SqlCommand(sqlcmd, cn))
                     {
-                        DataSet ds = new DataSet();
-                        salda.Fill(ds);
-                        DataTable dt = ds.Tables[0];
-
-                        if (dt.Rows.Count > 0 && dt != null)
+                        cmd.Parameters.Add("@ShipperID", System.Data.SqlDbType.Int).Value = ShipperID;
+                        using (SqlDataAdapter salda = new SqlDataAdapter(cmd))
                         {
-                            foreach (DataRow dr in dt.Rows)
+                            DataSet ds = new DataSet();
+                            salda.Fill(ds);
+                            DataTable dt = ds.Tables[0];
+
+                            if (dt.Rows.Count > 0 && dt != null)
                             {
-                                shipper.ShipperID = int.Parse(dr["ShipperID"].ToString() ?? "0");
-                                shipper.CompanyName = dr["CompanyName"].ToString() ?? "無";
-                                shipper.Phone = dr["Phone"].ToString();
+                                foreach (DataRow dr in dt.Rows)
+                                {
+                                    shipper.ShipperID = int.Parse(dr["ShipperID"].ToString() ?? "0");
+                                    shipper.CompanyName = dr["CompanyName"].ToString() ?? "無";
+                                    shipper.Phone = dr["Phone"].ToString();
+                                }
                             }
                         }
                     }
                 }
+                return shipper;
             }
-            return shipper;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
-        public int DelShippers(int ShipperID)
+        public int DelShipper(int ShipperID)
         {
-            string sqlcmd = "Delete [master].[dbo].[Shippers] Where ShipperID = @ShipperID ";
-
-            using (SqlConnection cn = new SqlConnection(defaultConnection))
+            try
             {
-                cn.Open();
-                using (SqlCommand cmd = new SqlCommand(sqlcmd, cn))
+                string sqlcmd = "Delete [master].[dbo].[Shipper] Where ShipperID = @ShipperID ";
+
+                using (SqlConnection cn = new SqlConnection(defaultConnection))
                 {
-                    cmd.Parameters.Add("@ShipperID", System.Data.SqlDbType.Int).Value = ShipperID;
-                   return cmd.ExecuteNonQuery();
+                    cn.Open();
+                    using (SqlCommand cmd = new SqlCommand(sqlcmd, cn))
+                    {
+                        cmd.Parameters.Add("@ShipperID", System.Data.SqlDbType.Int).Value = ShipperID;
+                        return cmd.ExecuteNonQuery();
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
+        public int updateShipper(int ShipperID, Shipper Shipper)
+        {
+            try
+            {
+                string sqlcmd = @"Update [master].[dbo].[Shipper] Set CompanyName = @CompanyName,
+                              Phone = @Phone Where ShipperID = @ShipperID ";
+
+                using (SqlConnection cn = new SqlConnection(defaultConnection))
+                {
+                    cn.Open();
+                    using (SqlCommand cmd = new SqlCommand(sqlcmd, cn))
+                    {
+                        cmd.Parameters.Add("@ShipperID", SqlDbType.Int).Value = ShipperID;
+                        cmd.Parameters.Add("@CompanyName", SqlDbType.NChar).Value = Shipper.CompanyName;
+                        cmd.Parameters.Add("@Phone", SqlDbType.NChar).Value = Shipper.Phone;
+                        return cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch
+            {
+                throw;
+            }
+
+
+        }
+
+        public int InsShipper(Shipper Shipper)
+        {
+            try
+            {
+                string sqlcmd = @"Insert Into [master].[dbo].[Shipper]
+                              Values( @CompanyName , @Phone )";
+
+                using (SqlConnection cn = new SqlConnection(defaultConnection))
+                {
+                    cn.Open();
+                    using (SqlCommand cmd = new SqlCommand(sqlcmd, cn))
+                    {
+                        cmd.Parameters.Add("@CompanyName", SqlDbType.NChar).Value = Shipper.CompanyName;
+                        cmd.Parameters.Add("@Phone", SqlDbType.NChar).Value = Shipper.Phone;
+                        return cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
     }
 }
 

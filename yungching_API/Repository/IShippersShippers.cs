@@ -1,12 +1,21 @@
-﻿using yungching_API.Model;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using System.Data;
+using yungching_API.Model;
+using System.Linq;
+using yungching_API.Repository;
 namespace yungching_API.Repository
 {
     public interface IShippersShippers
     {
-        public IEnumerable<Shippers> GetShippersList();
+        public ActionResult<IEnumerable<Shipper>> GetShippersList();
 
-        public Shippers GetShippers(int ShipperID);
+        public Shipper GetShipper(int ShipperID);
 
-        public int DelShippers(int ShipperID);
+        public int DelShipper(int ShipperID);
+
+        public int updateShipper(int ShipperID, Shipper Shippers);
+
+        public int InsShipper(Shipper Shippers);
     }
 }

@@ -4,11 +4,11 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 namespace yungching_API.Repository
 {
-    public class ShipperSevices : IShippersShippers
+    public class ShippersSevices : IShippersShippers
     {
         private readonly IConfiguration _Configuration;
         string defaultConnection = String.Empty;
-        public ShipperSevices(IConfiguration configuration)
+        public ShippersSevices(IConfiguration configuration)
         {
             _Configuration = configuration;
             //字串設定TrustServerCertificate=True
@@ -42,7 +42,7 @@ namespace yungching_API.Repository
                                 {
                                     Shipper shipper = new Shipper()
                                     {
-                                        ShipperID = int.Parse(dr["ShipperID"].ToString() ?? "0"),
+                                        ShipperId = int.Parse(dr["ShipperID"].ToString() ?? "0"),
                                         CompanyName = dr["CompanyName"].ToString() ?? "無",
                                         Phone = dr["Phone"].ToString()
                                     };
@@ -84,7 +84,7 @@ namespace yungching_API.Repository
                             {
                                 foreach (DataRow dr in dt.Rows)
                                 {
-                                    shipper.ShipperID = int.Parse(dr["ShipperID"].ToString() ?? "0");
+                                    shipper.ShipperId = int.Parse(dr["ShipperID"].ToString() ?? "0");
                                     shipper.CompanyName = dr["CompanyName"].ToString() ?? "無";
                                     shipper.Phone = dr["Phone"].ToString();
                                 }

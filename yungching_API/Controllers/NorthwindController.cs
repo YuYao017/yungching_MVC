@@ -76,7 +76,7 @@ namespace yungching_API.Controllers
             try
             {
                 Shipper shippers = _IShippersShippers.GetShipper(ShipperID);
-                if (shippers != null && shippers.ShipperID != 0)
+                if (shippers != null && shippers.ShipperId != 0)
                 {
                     return shippers;
                 }

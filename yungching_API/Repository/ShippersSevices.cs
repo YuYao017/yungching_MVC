@@ -20,7 +20,7 @@ namespace yungching_API.Repository
             {
 
 
-                string sqlcmd = "select *  FROM [master].[dbo].[Shipper] with (nolock) ";
+                string sqlcmd = "select *  FROM [master].[dbo].[Shippers] with (nolock) ";
 
                 List<Shipper> ShipperList = new List<Shipper>();
 
@@ -64,7 +64,7 @@ namespace yungching_API.Repository
         {
             try
             {
-                string sqlcmd = "select *  FROM [master].[dbo].[Shipper] with (nolock) Where ShipperID = @ShipperID ";
+                string sqlcmd = "select *  FROM [master].[dbo].[Shippers] with (nolock) Where ShipperID = @ShipperID ";
 
                 Shipper shipper = new Shipper();
 
@@ -105,7 +105,7 @@ namespace yungching_API.Repository
         {
             try
             {
-                string sqlcmd = "Delete [master].[dbo].[Shipper] Where ShipperID = @ShipperID ";
+                string sqlcmd = "Delete [master].[dbo].[Shippers] Where ShipperID = @ShipperID ";
 
                 using (SqlConnection cn = new SqlConnection(defaultConnection))
                 {
@@ -127,7 +127,7 @@ namespace yungching_API.Repository
         {
             try
             {
-                string sqlcmd = @"Update [master].[dbo].[Shipper] Set CompanyName = @CompanyName,
+                string sqlcmd = @"Update [master].[dbo].[Shippers] Set CompanyName = @CompanyName,
                               Phone = @Phone Where ShipperID = @ShipperID ";
 
                 using (SqlConnection cn = new SqlConnection(defaultConnection))
@@ -154,7 +154,7 @@ namespace yungching_API.Repository
         {
             try
             {
-                string sqlcmd = @"Insert Into [master].[dbo].[Shipper]
+                string sqlcmd = @"Insert Into [master].[dbo].[Shippers]
                               Values( @CompanyName , @Phone )";
 
                 using (SqlConnection cn = new SqlConnection(defaultConnection))
